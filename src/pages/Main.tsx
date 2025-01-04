@@ -49,14 +49,18 @@ const MainPage = () => {
           <header className="mb-10 flex items-end justify-between">
             <img className="h-[50px]" src={Logo} alt="logo" />
             <div className="flex items-center space-x-2">
-              {user && <p className="text-gray-900">안녕하세요, {user.providerData[0].displayName || '사용자'}님!</p>}
               {user ? (
-                <Button
-                  className="rounded border border-solid border-gray-400 px-1 text-xs text-gray-700"
-                  onClick={useAuthStore.getState().signOut}
-                >
-                  로그아웃
-                </Button>
+                <div className="flex flex-col items-end space-y-1">
+                  <p className="text-sm text-gray-900">
+                    안녕하세요, <span className="font-semibold">{user.providerData[0].displayName || '사용자'}</span>님!
+                  </p>
+                  <Button
+                    className="rounded border border-solid border-gray-400 px-1 text-xs text-gray-600"
+                    onClick={useAuthStore.getState().signOut}
+                  >
+                    로그아웃
+                  </Button>
+                </div>
               ) : (
                 <KakaoLoginButton className="w-40" />
               )}
@@ -69,7 +73,7 @@ const MainPage = () => {
                 const isToday = month === currentMonth
                 return (
                   <div key={month}>
-                    <div className="mb-5 scroll-m-5 text-2xl" ref={isToday ? todayRef : null}>
+                    <div className="mb-5 scroll-m-5 text-2xl font-medium" ref={isToday ? todayRef : null}>
                       {today.getFullYear()}년 {month}월
                     </div>
                     <div className="grid grid-cols-2 gap-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5">

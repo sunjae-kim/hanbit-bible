@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon-192x192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content="한빛교회 공동체가 함께하는 성경읽기" />
@@ -12,24 +12,24 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="한빛공동체" />
+    <meta property="og:title" content="한빛 공동체 성경읽기" />
     <meta property="og:description" content="한빛교회 공동체가 함께하는 성경읽기" />
     <meta property="og:image" content="/images/og-image.png" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="한빛공동체" />
+    <meta name="twitter:title" content="한빛 공동체 성경읽기" />
     <meta name="twitter:description" content="한빛교회 공동체가 함께하는 성경읽기" />
     <meta name="twitter:image" content="/images/og-image.png" />
 
     <!-- Apple specific -->
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="한빛공동체" />
+    <meta name="apple-mobile-web-app-title" content="한빛 공동체 성경읽기" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="format-detection" content="telephone=no" />
 
-    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
     <link rel="manifest" href="/manifest.json" />
 
     <link
@@ -37,6 +37,43 @@
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css"
       as="style"
     />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Church",
+        "name": "한빛교회",
+        "description": "잠실 한빛교회",
+        "url": "http://www.hanbit-ch.org/",
+        "sameAs": ["https://www.youtube.com/@hanbit-ch"],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "서울특별시 송파구 가락로5길 28",
+          "addressLocality": "송파구",
+          "addressRegion": "서울특별시",
+          "postalCode": "05680",
+          "addressCountry": "KR"
+        },
+        "telephone": "02-423-1578",
+        "image": [
+          "https://hanbit.app/images/icons/icon-512x512.png",
+          "https://hanbit.app/images/icons/icon-192x192.png"
+        ],
+        "openingHours": ["Su 09:00-16:00"],
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "http://www.hanbit-ch.org/"
+        },
+        "potentialAction": {
+          "@type": "ReadAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "http://www.hanbit-ch.org/"
+          }
+        }
+      }
+    </script>
 
     <title>한빛공동체</title>
   </head>
