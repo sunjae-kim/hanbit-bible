@@ -1,0 +1,30 @@
+name: Deploy Production
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Create production env file
+        run: |
+          echo "VITE_KAKAO_REST_API_KEY=${{ secrets.PROD_KAKAO_REST_API_KEY }}" >> .env.production
+          echo "VITE_KAKAO_REDIRECT_URI=${{ secrets.PROD_KAKAO_REDIRECT_URI }}" >> .env.production
+          echo "VITE_KAKAO_CLIENT_SECRET=${{ secrets.PROD_KAKAO_CLIENT_SECRET }}" >> .env.production
+          echo "VITE_BASE_URL=${{ secrets.PROD_BASE_URL }}" >> .env.production
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+        
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
