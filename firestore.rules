@@ -15,14 +15,14 @@ service cloud.firestore {
       
       // yearPlans 서브컬렉션에 대한 규칙
       match /yearPlans/{planId} {
-        // 소유자는 모든 권한, 다른 사용자는 읽기만 가능
-        allow read: if isSignedIn();
+        // 누구나 읽기 가능, 소유자만 쓰기 가능
+        allow read: if true;  // 변경: 모든 사용자 읽기 허용
         allow write: if isOwner();
         
         // months 서브컬렉션에 대한 규칙
         match /months/{monthId} {
-          // 소유자는 모든 권한, 다른 사용자는 읽기만 가능
-          allow read: if isSignedIn();
+          // 누구나 읽기 가능, 소유자만 쓰기 가능
+          allow read: if true;  // 변경: 모든 사용자 읽기 허용
           allow write: if isOwner();
         }
       }
@@ -30,7 +30,7 @@ service cloud.firestore {
 
     // CollectionGroup 쿼리를 위한 규칙
     match /{path=**}/months/{monthId} {
-      allow read: if isSignedIn();  // 로그인한 사용자는 모든 months 문서를 읽을 수 있음
+      allow read: if true;  // 변경: 모든 사용자 읽기 허용
     }
   }
 }
