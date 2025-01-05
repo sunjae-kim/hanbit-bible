@@ -27,15 +27,9 @@ const PlanByDatePage = () => {
     if (!user) {
       setLoginModal(true)
     } else {
-      setCompletion(date, true)
+      setCompletion({ date, value: true })
       navigate('/')
-      toast.success('읽기 체크완료!', {
-        position: 'top-center',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      toast.success('읽기 체크완료!')
     }
   }, [date, user, setCompletion, navigate])
 

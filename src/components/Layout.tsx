@@ -10,7 +10,7 @@ const Layout = () => (
       <SplashLayout>
         <ScrollRestoration />
         <Outlet />
-        <ToastContainer />
+        <ToastContainer position="top-center" autoClose={2000} hideProgressBar closeOnClick pauseOnHover />
       </SplashLayout>
     </AuthProvider>
   </RepositoryProvider>

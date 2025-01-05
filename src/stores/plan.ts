@@ -14,7 +14,7 @@ interface PlanActions {
   setActivePlan: (planId: string) => void
   getReadingForDate: (date: Date) => DailyReading | null
   createCustomPlan: (plan: Plan) => void
-  loadDefaultPlan: () => Promise<void>
+  loadDefaultPlan: () => void
 }
 
 export const usePlanStore = create<PlanState & PlanActions>()(
@@ -25,7 +25,7 @@ export const usePlanStore = create<PlanState & PlanActions>()(
       isLoading: true,
       error: null,
 
-      loadDefaultPlan: async () => {
+      loadDefaultPlan: () => {
         try {
           set({ isLoading: true, error: null })
 

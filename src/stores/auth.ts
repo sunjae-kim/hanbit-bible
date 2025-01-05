@@ -5,6 +5,7 @@ import { User, signOut as firebaseSignOut } from 'firebase/auth'
 interface AuthStore {
   user: User | null
   initialized: boolean
+  initializedPromise: Promise<User | null>
   setUser: (user: User | null) => void
   signOut: () => Promise<void>
 }
@@ -47,9 +48,18 @@ const getInitialState = () => {
   return auth.currentUser || storage.get()
 }
 
+const initializedPromise = new Promise<User | null>((resolve) => {
+  const unsubscribe = auth.onAuthStateChanged((user) => {
+    storage.set(user)
+    unsubscribe()
+    resolve(user)
+  })
+})
+
 export const useAuthStore = create<AuthStore>()((set) => ({
   user: getInitialState(),
   initialized: false,
+  initializedPromise,
   setUser: (user) => {
     storage.set(user)
     set({ user, initialized: true })

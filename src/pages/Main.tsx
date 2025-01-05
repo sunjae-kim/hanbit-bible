@@ -42,6 +42,18 @@ const MainPage = () => {
     }
   }, [activePlan])
 
+  const onCompletionToggle = (date: string) => {
+    if (!user) {
+      if (!toast.isActive(LOGIN_TOAST_ID)) {
+        toast.info('로그인 후 이용해주세요', {
+          toastId: LOGIN_TOAST_ID,
+        })
+      }
+      return
+    }
+    toggleCompletion(date)
+  }
+
   return (
     <>
       <div className="flex min-h-screen flex-col bg-gray-50 p-4 pt-10">
@@ -124,24 +136,9 @@ const MainPage = () => {
                               <input
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  if (!user) {
-                                    // 이미 해당 ID의 토스트가 활성화되어 있는지 확인
-                                    if (!toast.isActive(LOGIN_TOAST_ID)) {
-                                      toast.error('로그인 후 이용해주세요', {
-                                        toastId: LOGIN_TOAST_ID, // 토스트에 ID 부여
-                                        position: 'top-center',
-                                        autoClose: 2000,
-                                        hideProgressBar: true,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                      })
-                                    }
-                                    return
-                                  }
-                                  if (isBeforeToday) {
-                                    toggleCompletion(dateString)
-                                  }
+                                  onCompletionToggle(dateString)
                                 }}
+                                disabled={!isBeforeToday}
                                 onChange={() => {}}
                                 checked={monthlyPlans.find((p) => p.month === Number(month))?.completions[day] || false}
                                 className="h-6 w-6 accent-primary"

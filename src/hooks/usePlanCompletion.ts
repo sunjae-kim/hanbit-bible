@@ -2,7 +2,9 @@ import defaultPlan from '@/data/defaultPlan.json'
 import { useAuthStore } from '@/stores/auth'
 import { usePlanCompletionStore } from '@/stores/planCompletion'
 import { Plan } from '@/types/plan'
-import { useCallback, useEffect, useState, useMemo } from 'react'
+import { format } from 'date-fns'
+import { User } from 'firebase/auth'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRepository } from './useRepository'
 
 export function usePlanCompletion(planId: string | null) {
@@ -82,14 +84,17 @@ export function usePlanCompletion(planId: string | null) {
   )
 
   const setCompletion = useCallback(
-    async (date: string, value: boolean) => {
-      if (!user || !planId) return
+    async ({ date, value, user: inputUser }: { date?: string; value: boolean; user?: User }) => {
+      const currentUser = inputUser ?? user
+      const currentDate = date ?? format(new Date(), 'yyyy-MM-dd')
+
+      if (!currentUser || !planId) return
 
       try {
-        const [year, month, day] = date.split('-').map(Number)
+        const [year, month, day] = currentDate.split('-').map(Number)
 
         const updatedMonth = await userPlanMonthRepository.updateCompletion(
-          user.uid,
+          currentUser.uid,
           planId,
           year,
           month,
@@ -97,10 +102,10 @@ export function usePlanCompletion(planId: string | null) {
           value,
         )
 
-        updateMonthPlan(user.uid, planId, updatedMonth)
-      } catch (err) {
-        setError(err as Error)
-        throw err
+        updateMonthPlan(currentUser.uid, planId, updatedMonth)
+      } catch (error) {
+        setError(error as Error)
+        throw error
       }
     },
     [user, planId, userPlanMonthRepository, updateMonthPlan],

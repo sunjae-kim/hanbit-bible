@@ -30,10 +30,10 @@ export const kakaoAuth = {
 
     try {
       const { id_token } = await this.getToken(code)
-      const credential = kakaoProvider.credential({ idToken: id_token })
-
+      const oauthCredential = kakaoProvider.credential({ idToken: id_token })
       await setPersistence(auth, browserSessionPersistence)
-      await signInWithCredential(auth, credential)
+      const userCredential = await signInWithCredential(auth, oauthCredential)
+      return userCredential.user
     } finally {
       setPending('auth', false)
     }

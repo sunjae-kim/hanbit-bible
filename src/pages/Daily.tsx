@@ -25,15 +25,9 @@ const DailyPage = () => {
     if (!user) {
       setLoginModal(true)
     } else {
-      setCompletion(format(today, 'yyyy-MM-dd'), true)
+      setCompletion({ date: format(today, 'yyyy-MM-dd'), value: true })
       navigate('/')
-      toast.success('읽기 체크완료!', {
-        position: 'top-center',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      toast.success('읽기 체크완료!')
     }
   }, [user, setCompletion, navigate])
 
