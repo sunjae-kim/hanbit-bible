@@ -80,7 +80,7 @@ const MainPage = () => {
                       {Object.entries(monthlyPlan).map(([day, dailyPlan]) => {
                         const isToday = month === currentMonth && day === String(today.getDate())
                         const dateString = `${today.getFullYear()}-${month}-${day}`
-                        const date = new Date(dateString)
+                        const date = new Date(dateString.replace(/-/g, '/'))
                         const route = isToday ? '/daily' : `/plan/${activePlanId}/${dateString}`
                         const isBeforeToday = isBefore(date, today)
 

@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePlanStore } from '@/stores/plan'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useCallback, useState } from 'react'
-import { useNavigate, useParams, useLocation } from 'react-router' // useLocation 추가
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
 
 const PlanByDatePage = () => {
@@ -46,7 +46,7 @@ const PlanByDatePage = () => {
 
   return (
     <>
-      <PlanViewer date={new Date(date)}>
+      <PlanViewer date={new Date(date.replace(/-/g, '/'))}>
         <div className="mb-4 mt-10 flex justify-end space-x-2">
           <Button variant="secondary" onClick={() => navigate('/')}>
             홈으로
