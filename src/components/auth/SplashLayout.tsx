@@ -1,15 +1,9 @@
 import { useSplashState } from '@/hooks/useSplashState'
-import { usePlanStore } from '@/stores/plan'
-import { PropsWithChildren, useEffect } from 'react'
+import { PropsWithChildren } from 'react'
 import { BarLoader } from 'react-spinners'
 
 export const SplashLayout = ({ children }: PropsWithChildren) => {
   const { initialized, showSplash, isHiding, loadingState } = useSplashState()
-  const { loadDefaultPlan } = usePlanStore()
-
-  useEffect(() => {
-    loadDefaultPlan()
-  }, [loadDefaultPlan])
 
   if (!initialized || showSplash) {
     return (

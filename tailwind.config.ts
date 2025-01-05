@@ -21,6 +21,7 @@ export default {
         'fade-in-up': 'fade-in-up 0.5s ease-out',
         'fade-in-down': 'fade-in-down 0.5s ease-out',
         'fade-out': 'fade-out 0.5s ease-out',
+        'heart-pop': 'heart-pop 0.3s ease-in-out',
       },
       keyframes: {
         'fade-in': {
@@ -38,6 +39,10 @@ export default {
         'fade-out': {
           '0%': { opacity: '1' },
           '100%': { opacity: '0' },
+        },
+        'heart-pop': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
         },
       },
       fontFamily: {

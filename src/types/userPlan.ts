@@ -6,6 +6,9 @@ export interface UserPlanMonth {
   completions: {
     [day: string]: boolean // "1" to "31"
   }
+  likes: {
+    [day: string]: boolean // "1" to "31"
+  }
   createdAt: Date
   updatedAt: Date
 }

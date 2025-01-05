@@ -2,9 +2,11 @@ import { db } from '@/lib/firebase'
 import { UserPlanMonth } from '@/types/userPlan'
 import {
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   Timestamp,
@@ -14,6 +16,10 @@ import {
 } from 'firebase/firestore'
 
 export class UserPlanMonthRepository {
+  protected normalizeDayString(day: string | number): string {
+    return String(parseInt(String(day)))
+  }
+
   protected getMonthDoc(userId: string, planId: string, _year: number, month: number) {
     return doc(db, 'userPlans', userId, 'yearPlans', planId, 'months', `${month}`)
   }
@@ -76,6 +82,7 @@ export class UserPlanMonthRepository {
       year,
       month,
       completions: {},
+      likes: {},
       createdAt: timestamp.toDate(),
       updatedAt: timestamp.toDate(),
     }
@@ -94,9 +101,32 @@ export class UserPlanMonthRepository {
   ): Promise<UserPlanMonth> {
     const docRef = this.getMonthDoc(userId, planId, year, month)
     const timestamp = Timestamp.now()
+    const normalizedDay = this.normalizeDayString(day)
 
     const updateData = {
-      [`completions.${day}`]: completed,
+      [`completions.${normalizedDay}`]: completed,
+      updatedAt: timestamp,
+    }
+
+    await updateDoc(docRef, updateData)
+    const updated = await getDoc(docRef)
+    return this.mapToModel(updated.data())
+  }
+
+  async updateLike(
+    userId: string,
+    planId: string,
+    year: number,
+    month: number,
+    day: string,
+    liked: boolean,
+  ): Promise<UserPlanMonth> {
+    const docRef = this.getMonthDoc(userId, planId, year, month)
+    const timestamp = Timestamp.now()
+    const normalizedDay = this.normalizeDayString(day)
+
+    const updateData = {
+      [`likes.${normalizedDay}`]: liked,
       updatedAt: timestamp,
     }
 
@@ -118,6 +148,7 @@ export class UserPlanMonthRepository {
         year,
         month,
         completions: {},
+        likes: {},
         createdAt: timestamp.toDate(),
         updatedAt: timestamp.toDate(),
       }
@@ -126,5 +157,31 @@ export class UserPlanMonthRepository {
     }
 
     await batch.commit()
+  }
+
+  listenToPlanStats(
+    planId: string,
+    date: Date,
+    callback: (stats: { totalLikes: number; totalCompletions: number }) => void,
+  ) {
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = this.normalizeDayString(date.getDate())
+
+    const monthsRef = collectionGroup(db, 'months')
+    const q = query(monthsRef, where('planId', '==', planId), where('year', '==', year), where('month', '==', month))
+
+    return onSnapshot(q, (snapshot) => {
+      let totalLikes = 0
+      let totalCompletions = 0
+
+      snapshot.forEach((doc) => {
+        const data = doc.data()
+        if (data.likes?.[day]) totalLikes++
+        if (data.completions?.[day]) totalCompletions++
+      })
+
+      callback({ totalLikes, totalCompletions })
+    })
   }
 }

@@ -67,8 +67,9 @@ export default function AuthKakaoCallbackPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <BounceLoader color="#36d7b7" />
+      <p className="mt-5 text-gray-600">로그인 중입니다</p>
     </div>
   )
 }

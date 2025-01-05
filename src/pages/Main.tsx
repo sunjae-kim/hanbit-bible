@@ -62,8 +62,8 @@ const MainPage = () => {
             <img className="h-[50px]" src={Logo} alt="logo" />
             <div className="flex items-center space-x-2">
               {user ? (
-                <div className="flex flex-col items-end space-y-1">
-                  <p className="text-sm text-gray-900">
+                <div className="flex flex-col items-end space-y-1.5">
+                  <p className="text-gray-900">
                     안녕하세요, <span className="font-semibold">{user.providerData[0].displayName || '사용자'}</span>님!
                   </p>
                   <Button
