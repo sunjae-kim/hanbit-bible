@@ -17,10 +17,7 @@ export function usePlanCompletion(planId: string | null) {
   const { getMonthlyPlans, setMonthlyPlans, updateMonthPlan } = usePlanCompletionStore()
 
   const currentYear = new Date().getFullYear()
-
-  // 캐시된 데이터 가져오기
   const cachedPlans = user && planId ? getMonthlyPlans(user.uid, planId) : null
-
   const monthlyPlans = useMemo(() => cachedPlans || [], [cachedPlans])
 
   useEffect(() => {
@@ -56,33 +53,6 @@ export function usePlanCompletion(planId: string | null) {
     loadPlans()
   }, [user, planId, userPlanMonthRepository, currentYear, getMonthlyPlans, setMonthlyPlans])
 
-  const toggleCompletion = useCallback(
-    async (date: string) => {
-      if (!user || !planId) return
-
-      try {
-        const [year, month, day] = date.split('-').map(Number)
-        const monthPlan = monthlyPlans.find((p) => p.month === month)
-        const newValue = !(monthPlan?.completions[day] ?? false)
-
-        const updatedMonth = await userPlanMonthRepository.updateCompletion(
-          user.uid,
-          planId,
-          year,
-          month,
-          String(day),
-          newValue,
-        )
-
-        updateMonthPlan(user.uid, planId, updatedMonth)
-      } catch (err) {
-        setError(err as Error)
-        throw err
-      }
-    },
-    [user, planId, userPlanMonthRepository, updateMonthPlan, monthlyPlans],
-  )
-
   const setCompletion = useCallback(
     async ({ date, value, user: inputUser }: { date?: string; value: boolean; user?: User }) => {
       const currentUser = inputUser ?? user
@@ -90,9 +60,17 @@ export function usePlanCompletion(planId: string | null) {
 
       if (!currentUser || !planId) return
 
-      try {
-        const [year, month, day] = currentDate.split('-').map(Number)
+      const [year, month, day] = currentDate.split('-').map(Number)
 
+      // 1) Update store first for immediate UI feedback
+      const localMonthPlan = monthlyPlans.find((plan) => plan.year === year && plan.month === month)
+      if (localMonthPlan) {
+        localMonthPlan.completions[String(day)] = value
+        updateMonthPlan(currentUser.uid, planId, { ...localMonthPlan })
+      }
+
+      try {
+        // 2) Then update repository
         const updatedMonth = await userPlanMonthRepository.updateCompletion(
           currentUser.uid,
           planId,
@@ -101,14 +79,37 @@ export function usePlanCompletion(planId: string | null) {
           String(day),
           value,
         )
-
+        // 3) Sync final repository result in store
         updateMonthPlan(currentUser.uid, planId, updatedMonth)
       } catch (error) {
+        // 4) Revert local update if needed
+        if (localMonthPlan) {
+          localMonthPlan.completions[String(day)] = !value
+          updateMonthPlan(currentUser.uid, planId, { ...localMonthPlan })
+        }
         setError(error as Error)
         throw error
       }
     },
-    [user, planId, userPlanMonthRepository, updateMonthPlan],
+    [user, planId, monthlyPlans, userPlanMonthRepository, updateMonthPlan],
+  )
+
+  const toggleCompletion = useCallback(
+    async (date: string) => {
+      if (!user || !planId) return
+
+      try {
+        const [_, month, day] = date.split('-').map(Number)
+        const monthPlan = monthlyPlans.find((p) => p.month === month)
+        const newValue = !(monthPlan?.completions[day] ?? false)
+
+        setCompletion({ date, value: newValue })
+      } catch (err) {
+        setError(err as Error)
+        throw err
+      }
+    },
+    [user, planId, monthlyPlans, setCompletion],
   )
 
   const getAllCompletions = useCallback(() => {
