@@ -158,10 +158,10 @@ const MainPage = () => {
           <footer className="mt-5 flex h-10 items-center text-sm text-gray-700">
             <span>문의사항</span>
             <div className="mx-2 h-3 w-px bg-gray-700" />
-            <a className="mr-1 underline" href="tel:010-3747-8756">
-              010-3747-8756
+            <a className="mr-1 underline" href="mailto:json@kakao.com">
+              json@kakao.com
             </a>
-            <span>1청년부 김선재</span>
+            <span>한빛교회 1청년부 김선재</span>
           </footer>
         </div>
       </div>
