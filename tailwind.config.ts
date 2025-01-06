@@ -18,6 +18,7 @@ export default {
     extend: {
       animation: {
         'fade-in': 'fade-in 0.5s ease-out',
+        'fade-in-fast': 'fade-in 0.3s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
         'fade-in-down': 'fade-in-down 0.5s ease-out',
         'fade-out': 'fade-out 0.5s ease-out',

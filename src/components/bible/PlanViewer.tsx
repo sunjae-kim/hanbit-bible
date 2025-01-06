@@ -84,7 +84,7 @@ const PlanViewer = ({ date }: IProps) => {
   return (
     <>
       <div className="bg-primary/10 px-4">
-        <div className="relative mx-auto max-w-screen-md pb-4 pt-10">
+        <div className="relative mx-auto min-h-screen max-w-screen-md pb-4 pt-10">
           <div className="absolute top-4 flex w-full justify-between">
             <button className="-m-5 p-5" onClick={() => navigate('/')}>
               <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
@@ -134,7 +134,7 @@ const PlanViewer = ({ date }: IProps) => {
             const rangeChapters = chapters[rangeKey] || []
 
             return (
-              <div key={index} className="space-y-8">
+              <div key={index} className="animate-fade-in-fast space-y-8">
                 {rangeChapters.map((chapter) => (
                   <div key={chapter.chapter} className="text-gray-900">
                     <h3 className="mb-2 text-xl font-semibold">
@@ -180,7 +180,7 @@ const PlanViewer = ({ date }: IProps) => {
             </div>
           )}
 
-          <div className="mb-4 mt-10 grid grid-cols-2 gap-2">
+          <div className="mb-4 mt-10 grid animate-fade-in grid-cols-2 gap-2">
             <Button className="py-5 text-base" variant="secondary" onClick={() => navigate('/')}>
               읽기표 보러가기
             </Button>
