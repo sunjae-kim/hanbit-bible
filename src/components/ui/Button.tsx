@@ -1,3 +1,5 @@
+import { classNames } from '@/utils'
+
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string
   children: React.ReactNode
@@ -13,7 +15,7 @@ const Button = ({ variant = 'primary', className = '', ...props }: Props) => {
   }
 
   return (
-    <button type="button" className={`${className} ${styles[variant]}`} {...props}>
+    <button type="button" className={classNames(styles[variant], className)} {...props}>
       {props.children}
     </button>
   )
