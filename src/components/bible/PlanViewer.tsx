@@ -202,7 +202,15 @@ const PlanViewer = ({ date }: IProps) => {
           </button>
           <div className="mb-1 text-lg font-medium">로그인 하시겠습니까?</div>
           <div className="text-sm text-gray-800">로그인 후 읽기표에 체크할 수 있습니다.</div>
-          <AppleLoginButton className="mt-4 w-44" />
+          <AppleLoginButton
+            className="mt-4 w-44"
+            onSuccess={(user) => {
+              setLoginModal(false)
+              setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true, user })
+              navigate('/')
+              toast.success('읽기 체크완료!')
+            }}
+          />
           <KakaoLoginButton className="mt-2 w-44" next={location.pathname} />
         </div>
       </Modal>

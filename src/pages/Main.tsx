@@ -65,7 +65,11 @@ const MainPage = () => {
               {user ? (
                 <div className="flex flex-col items-end space-y-1.5">
                   <p className="text-gray-900">
-                    안녕하세요, <span className="font-semibold">{user.providerData[0].displayName || '사용자'}</span>님!
+                    안녕하세요,{' '}
+                    <span className="font-semibold">
+                      {user.displayName || user.providerData[0].displayName || '사용자'}
+                    </span>
+                    님!
                   </p>
                   <Button
                     className="rounded border border-solid border-gray-400 px-1 text-xs text-gray-600"
