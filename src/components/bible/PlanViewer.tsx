@@ -1,3 +1,4 @@
+import AppleLoginButton from '@/components/auth/AppleLoginButton'
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
@@ -181,7 +182,7 @@ const PlanViewer = ({ date }: IProps) => {
           )}
 
           <div className="mb-4 mt-10 grid animate-fade-in grid-cols-2 gap-2">
-            <Button className="py-5 text-base" variant="secondary" onClick={() => navigate('/')}>
+            <Button className="py-5 !text-base" variant="secondary" onClick={() => navigate('/')}>
               읽기표 보러가기
             </Button>
             <Button onClick={markAsReadAndLeave}>
@@ -201,7 +202,16 @@ const PlanViewer = ({ date }: IProps) => {
           </button>
           <div className="mb-1 text-lg font-medium">로그인 하시겠습니까?</div>
           <div className="text-sm text-gray-800">로그인 후 읽기표에 체크할 수 있습니다.</div>
-          <KakaoLoginButton className="mt-4 w-44" next={location.pathname} />
+          <AppleLoginButton
+            className="mt-4 w-44"
+            onSuccess={(user) => {
+              setLoginModal(false)
+              setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true, user })
+              navigate('/')
+              toast.success('읽기 체크완료!')
+            }}
+          />
+          <KakaoLoginButton className="mt-2 w-44" next={location.pathname} />
         </div>
       </Modal>
     </>

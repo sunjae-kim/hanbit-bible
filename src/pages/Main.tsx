@@ -1,4 +1,5 @@
 import Logo from '@/assets/logo.png'
+import AppleLoginButton from '@/components/auth/AppleLoginButton'
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { BIBLE_BOOK_MAPPER } from '@/lib/bible'
@@ -58,13 +59,17 @@ const MainPage = () => {
     <>
       <div className="flex min-h-screen flex-col bg-gray-50 p-4 pt-10">
         <div className="mx-auto w-full max-w-screen-md grow">
-          <header className="mb-10 flex items-end justify-between">
+          <header className="mb-10 flex items-start justify-between">
             <img className="h-[50px]" src={Logo} alt="logo" />
             <div className="flex items-center space-x-2">
               {user ? (
                 <div className="flex flex-col items-end space-y-1.5">
                   <p className="text-gray-900">
-                    안녕하세요, <span className="font-semibold">{user.providerData[0].displayName || '사용자'}</span>님!
+                    안녕하세요,{' '}
+                    <span className="font-semibold">
+                      {user.displayName || user.providerData[0].displayName || '사용자'}
+                    </span>
+                    님!
                   </p>
                   <Button
                     className="rounded border border-solid border-gray-400 px-1 text-xs text-gray-600"
@@ -74,7 +79,10 @@ const MainPage = () => {
                   </Button>
                 </div>
               ) : (
-                <KakaoLoginButton className="w-40" />
+                <div className="flex flex-col space-y-2">
+                  <AppleLoginButton className="h-10" />
+                  <KakaoLoginButton className="h-10" />
+                </div>
               )}
             </div>
           </header>
