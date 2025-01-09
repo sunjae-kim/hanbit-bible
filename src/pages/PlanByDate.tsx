@@ -1,4 +1,4 @@
-import PlanViewer from '@/components/bible/PlanViewer'
+import BibleViewer from '@/components/bible/BibleViewer'
 import { useNavigate, useParams } from 'react-router'
 
 const PlanByDatePage = () => {
@@ -10,7 +10,7 @@ const PlanByDatePage = () => {
     return null
   }
 
-  return <PlanViewer date={new Date(date.replace(/-/g, '/'))} />
+  return <BibleViewer date={new Date(date.replace(/-/g, '/'))} />
 }
 
 export default PlanByDatePage

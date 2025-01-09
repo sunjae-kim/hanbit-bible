@@ -4,12 +4,12 @@ import { classNames } from '@/utils'
 
 interface KakaoLoginButtonProps {
   className?: string
-  next?: string
+  from?: string
 }
 
-const KakaoLoginButton = ({ className, next }: KakaoLoginButtonProps) => {
+const KakaoLoginButton = ({ className, from }: KakaoLoginButtonProps) => {
   const onClick = () => {
-    window.location.href = KAKAO_AUTH_URL + (next ? `&state=${next}` : '')
+    window.location.href = KAKAO_AUTH_URL + (from ? `&state=${from}` : '')
   }
 
   return (

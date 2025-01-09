@@ -104,6 +104,7 @@ export function usePlanCompletion(planId: string | null) {
         const newValue = !(monthPlan?.completions[day] ?? false)
 
         setCompletion({ date, value: newValue })
+        return newValue
       } catch (err) {
         setError(err as Error)
         throw err

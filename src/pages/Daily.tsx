@@ -1,9 +1,9 @@
-import PlanViewer from '@/components/bible/PlanViewer'
+import BibleViewer from '@/components/bible/BibleViewer'
 
 const today = new Date()
 
 const DailyPage = () => {
-  return <PlanViewer date={today} />
+  return <BibleViewer date={today} />
 }
 
 export default DailyPage

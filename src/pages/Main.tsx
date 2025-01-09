@@ -1,11 +1,13 @@
 import Logo from '@/assets/logo.png'
 import AppleLoginButton from '@/components/auth/AppleLoginButton'
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton'
+import { useConfetti } from '@/contexts/confetti.context'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { BIBLE_BOOK_MAPPER } from '@/lib/bible'
 import { useAuthStore } from '@/stores/auth'
 import { usePlanStore } from '@/stores/plan'
-import { classNames } from '@/utils'
+import { KakaoLoginState } from '@/types/user'
+import { classNames, encodeObjectToBase64 } from '@/utils'
 import { Button } from '@headlessui/react'
 import { BookOpenIcon } from '@heroicons/react/20/solid'
 import { isBefore, isSameDay } from 'date-fns'
@@ -43,7 +45,8 @@ const MainPage = () => {
     }
   }, [activePlan])
 
-  const onCompletionToggle = (date: string) => {
+  const { showConfetti } = useConfetti()
+  const onCompletionToggle = async (date: string) => {
     if (!user) {
       if (!toast.isActive(LOGIN_TOAST_ID)) {
         toast.info('로그인 후 이용해주세요', {
@@ -51,8 +54,13 @@ const MainPage = () => {
         })
       }
       return
+    } else {
+      const value = await toggleCompletion(date)
+      if (value) {
+        showConfetti()
+        toast('🎉 읽기 체크완료!')
+      }
     }
-    toggleCompletion(date)
   }
 
   return (
@@ -81,7 +89,7 @@ const MainPage = () => {
               ) : (
                 <div className="flex flex-col space-y-2">
                   <AppleLoginButton className="h-10" />
-                  <KakaoLoginButton className="h-10" />
+                  <KakaoLoginButton className="h-10" from={encodeObjectToBase64<KakaoLoginState>({ path: '/' })} />
                 </div>
               )}
             </div>

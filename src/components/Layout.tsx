@@ -1,5 +1,6 @@
 import { SplashLayout } from '@/components/auth/SplashLayout.tsx'
 import { AuthProvider } from '@/contexts/auth.provider'
+import { ConfettiProvider } from '@/contexts/confetti.provider'
 import { RepositoryProvider } from '@/contexts/repository.provider'
 import { usePlanStore } from '@/stores/plan'
 import { useEffect } from 'react'
@@ -17,9 +18,11 @@ const Layout = () => {
     <RepositoryProvider>
       <AuthProvider>
         <SplashLayout>
-          <ScrollRestoration />
-          <Outlet />
-          <ToastContainer position="top-center" autoClose={2000} hideProgressBar closeOnClick pauseOnHover />
+          <ConfettiProvider>
+            <ScrollRestoration />
+            <Outlet />
+            <ToastContainer position="top-center" autoClose={2000} hideProgressBar closeOnClick pauseOnHover />
+          </ConfettiProvider>
         </SplashLayout>
       </AuthProvider>
     </RepositoryProvider>

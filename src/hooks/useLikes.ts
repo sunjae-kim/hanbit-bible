@@ -59,7 +59,7 @@ export const useLikes = (date: Date) => {
     const day = String(date.getDate())
 
     setAnimate(true)
-    setTimeout(() => setAnimate(false), 300)
+    setTimeout(() => setAnimate(false), 1000)
 
     try {
       if (!liked) {

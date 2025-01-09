@@ -1,6 +1,9 @@
+import { useConfetti } from '@/contexts/confetti.context'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { kakaoAuth } from '@/lib/kakao'
 import { usePlanStore } from '@/stores/plan'
+import { KAKAO_LOGIN_CONTEXT, KakaoLoginState } from '@/types/user'
+import { decodeBase64ToObject } from '@/utils'
 import { User } from 'firebase/auth'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router'
@@ -16,19 +19,21 @@ export default function AuthKakaoCallbackPage() {
 
   const activePlanId = usePlanStore((state) => state.activePlanId)
   const { setCompletion } = usePlanCompletion(activePlanId)
+  const { showConfetti } = useConfetti()
 
-  const onSignIn = useCallback(
+  const checkAsRead = useCallback(
     async (user: User) => {
       try {
         await setCompletion({ user, value: true })
         navigate('/')
-        toast.success('읽기 체크완료!')
+        toast('🎉 읽기 체크완료!')
+        showConfetti()
       } catch (error) {
         console.error('Error during sign-in:', error)
         toast.error('읽기 체크에 실패했습니다. 잠시 후 다시 시도해주세요.')
       }
     },
-    [setCompletion, navigate],
+    [setCompletion, navigate, showConfetti],
   )
 
   useEffect(() => {
@@ -37,7 +42,8 @@ export default function AuthKakaoCallbackPage() {
     }
 
     signInAttempted.current = true
-    const next = searchParams.get('state') || ''
+    const state = searchParams.get('state') || ''
+    const stateObj = decodeBase64ToObject<KakaoLoginState>(state)
 
     kakaoAuth
       .signIn(code)
@@ -48,10 +54,11 @@ export default function AuthKakaoCallbackPage() {
           return
         }
 
-        if (next === 'daily') {
-          await onSignIn(user)
+        if (stateObj.context === KAKAO_LOGIN_CONTEXT.CHECK) {
+          await checkAsRead(user)
         } else {
-          navigate('/' + next)
+          toast.success('로그인 성공!')
+          navigate(stateObj.path || '/')
         }
       })
       .catch((error) => {
@@ -59,7 +66,7 @@ export default function AuthKakaoCallbackPage() {
         navigate('/')
         toast.error('로그인에 실패했습니다. 다시 시도해주세요.')
       })
-  }, [code, searchParams, onSignIn, navigate])
+  }, [code, searchParams, checkAsRead, navigate])
 
   if (!code) {
     navigate('/')

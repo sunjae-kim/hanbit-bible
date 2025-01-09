@@ -1,15 +1,20 @@
 import AppleLoginButton from '@/components/auth/AppleLoginButton'
 import KakaoLoginButton from '@/components/auth/KakaoLoginButton'
+import AmenButton from '@/components/bible/AmenButton'
+import BiblePlayer from '@/components/bible/BiblePlayer'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
+import { useConfetti } from '@/contexts/confetti.context'
 import { useLikes } from '@/hooks/useLikes'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { BIBLE_BOOK_MAPPER, bibleManager } from '@/lib/bible'
 import { useAuthStore } from '@/stores/auth'
 import { usePlanStore } from '@/stores/plan'
-import { classNames } from '@/utils'
-import { CheckCircleIcon, HeartIcon } from '@heroicons/react/20/solid'
-import { ChevronLeftIcon, HeartIcon as HeartIconOutline, XMarkIcon } from '@heroicons/react/24/outline'
+import { KAKAO_LOGIN_CONTEXT, KakaoLoginState } from '@/types/user'
+import { encodeObjectToBase64 } from '@/utils'
+import { shareLink } from '@/utils/shareLink'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
+import { ArrowUpOnSquareIcon, ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { format, isSameDay } from 'date-fns'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -25,7 +30,7 @@ interface IProps {
   date: Date
 }
 
-const PlanViewer = ({ date }: IProps) => {
+const BibleViewer = ({ date }: IProps) => {
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
   const { getReadingForDate } = usePlanStore()
@@ -33,25 +38,22 @@ const PlanViewer = ({ date }: IProps) => {
   const reading = getReadingForDate(date)
   const today = useMemo(() => new Date(), [])
   const isToday = isSameDay(date, today)
-  const { liked, animate, stats, setAsLike, isLoading } = useLikes(date)
+  const { stats, isLoading } = useLikes(date)
   const activePlanId = usePlanStore((state) => state.activePlanId)
   const { setCompletion } = usePlanCompletion(activePlanId)
   const [loginModal, setLoginModal] = useState(false)
-
-  const onLikeClick = () => {
-    setAsLike()
-    setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true })
-  }
+  const { showConfetti } = useConfetti()
 
   const markAsReadAndLeave = useCallback(() => {
     if (!user) {
       setLoginModal(true)
     } else {
       setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true })
+      toast('🎉 읽기 체크완료!')
       navigate('/')
-      toast.success('읽기 체크완료!')
+      showConfetti()
     }
-  }, [user, setCompletion, navigate, date])
+  }, [user, setCompletion, navigate, date, showConfetti])
 
   useEffect(() => {
     if (!reading) return
@@ -78,6 +80,17 @@ const PlanViewer = ({ date }: IProps) => {
     setChapters(loadedChapters)
   }, [reading])
 
+  const shareText = reading?.ranges
+    .map(
+      (range) =>
+        `${BIBLE_BOOK_MAPPER[range.book]} ${
+          range.startChapter === range.endChapter
+            ? `${range.startChapter}장`
+            : `${range.startChapter}-${range.endChapter}장`
+        }`,
+    )
+    .join(', ')
+
   if (!reading) {
     return <div>오늘의 읽기 분량이 없습니다.</div>
   }
@@ -85,10 +98,23 @@ const PlanViewer = ({ date }: IProps) => {
   return (
     <>
       <div className="bg-primary/10 px-4">
-        <div className="relative mx-auto min-h-screen max-w-screen-md pb-4 pt-10">
-          <div className="absolute top-4 flex w-full justify-between">
+        <div className="relative mx-auto min-h-screen max-w-screen-md pb-4 pt-20">
+          <div className="absolute top-4 flex w-full items-start justify-between">
             <button className="-m-5 p-5" onClick={() => navigate('/')}>
               <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
+            </button>
+
+            <button
+              className="-m-5 flex flex-col items-center justify-center p-5"
+              onClick={() =>
+                shareLink({
+                  title: '오늘의 성경 읽기',
+                  text: `성경 읽기: ${shareText}`,
+                })
+              }
+            >
+              <ArrowUpOnSquareIcon className="mb-1 h-6 w-6 text-gray-800" />
+              <span className="text-xs">공유하기</span>
             </button>
           </div>
 
@@ -130,6 +156,18 @@ const PlanViewer = ({ date }: IProps) => {
             </div>
           </div>
 
+          <BiblePlayer
+            date={date}
+            bibleRange={reading.ranges}
+            onEnded={() => {
+              if (isToday) {
+                toast.success('오늘의 성경 읽기를 완료했어요! 🎉')
+              } else {
+                toast.success('성경 읽기를 완료했어요! 🎉')
+              }
+            }}
+          />
+
           {reading.ranges.map((range, index) => {
             const rangeKey = `${range.book}${range.startChapter}-${range.endChapter}`
             const rangeChapters = chapters[rangeKey] || []
@@ -156,28 +194,8 @@ const PlanViewer = ({ date }: IProps) => {
           })}
 
           {user && (
-            <div className="flex flex-col items-center justify-center pb-5 pt-10">
-              <button className="h-16" onClick={onLikeClick}>
-                {!isLoading && (
-                  <div className="flex animate-fade-in flex-col items-center space-y-1">
-                    {liked ? (
-                      <HeartIcon className={classNames('h-10 w-10 text-red-500', animate ? 'animate-heart-pop' : '')} />
-                    ) : (
-                      <HeartIconOutline
-                        className={classNames('h-10 w-10 text-red-500', animate ? 'animate-heart-pop' : '')}
-                      />
-                    )}
-
-                    {liked ? (
-                      <span className="animate-fade-in text-sm font-medium text-red-500">
-                        {stats.totalLikes.toLocaleString()}명이 아멘했어요
-                      </span>
-                    ) : (
-                      <span className="text-sm font-medium tracking-wider text-red-500">아멘하기</span>
-                    )}
-                  </div>
-                )}
-              </button>
+            <div className="mt-5 xs:mt-10">
+              <AmenButton date={date} onLikeClick={() => showConfetti()} />
             </div>
           )}
 
@@ -208,14 +226,21 @@ const PlanViewer = ({ date }: IProps) => {
               setLoginModal(false)
               setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true, user })
               navigate('/')
-              toast.success('읽기 체크완료!')
+              toast('🎉 읽기 체크완료!')
+              showConfetti()
             }}
           />
-          <KakaoLoginButton className="mt-2 w-44" next={location.pathname} />
+          <KakaoLoginButton
+            className="mt-2 w-44"
+            from={encodeObjectToBase64<KakaoLoginState>({
+              context: KAKAO_LOGIN_CONTEXT.CHECK,
+              path: location.pathname,
+            })}
+          />
         </div>
       </Modal>
     </>
   )
 }
 
-export default PlanViewer
+export default BibleViewer
