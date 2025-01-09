@@ -48,6 +48,8 @@ book,chapter,youtube_id,start_time,end_time
 창,26,rh_RBkLf8j0,5:01,10:40
 창,27,EtnOiYlSn9Q,0:12,8:23
 창,28,EtnOiYlSn9Q,8:24,12:15
+창,29,LxVHgPy5GaU,0:12,5:32
+창,30,LxVHgPy5GaU,5:33,12:32
 `.trim()
 
 interface VideoSequenceItem {
