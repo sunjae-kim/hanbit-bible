@@ -1,6 +1,6 @@
 import { ConfettiContext } from '@/contexts/confetti.context'
 import { ConfettiOptions } from '@/types/confetti'
-import Confetti from '@/utils/Confetti'
+import Confetti from '@/utils/confetti'
 import { useCallback, useState } from 'react'
 
 export const ConfettiProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
