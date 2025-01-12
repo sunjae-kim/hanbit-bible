@@ -19,6 +19,8 @@ import { format, isSameDay } from 'date-fns'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import TextController from './TextController'
+import { useTextSettingsStore } from '@/stores/text-setting'
 
 interface ChapterContent {
   book: string
@@ -91,6 +93,10 @@ const BibleViewer = ({ date }: IProps) => {
     )
     .join(', ')
 
+  // text control
+  const [controllerModal, setControllerModal] = useState(false)
+  const { fontSize, lineHeight, letterSpacing } = useTextSettingsStore()
+
   if (!reading) {
     return <div>오늘의 읽기 분량이 없습니다.</div>
   }
@@ -99,13 +105,15 @@ const BibleViewer = ({ date }: IProps) => {
     <>
       <div className="bg-primary/10 px-4">
         <div className="relative mx-auto min-h-screen max-w-screen-md pb-4 pt-20">
-          <div className="absolute top-4 flex w-full items-start justify-between">
+          <div className="absolute top-4 flex w-full items-start">
             <button className="-m-5 p-5" onClick={() => navigate('/')}>
               <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
             </button>
 
+            <TextController className="ml-auto mr-4" isOpen={controllerModal} setIsOpen={setControllerModal} />
+
             <button
-              className="-m-5 flex flex-col items-center justify-center p-5"
+              className="-m-2 flex flex-col items-center justify-center p-2"
               onClick={() =>
                 shareLink({
                   title: '오늘의 성경 읽기',
@@ -179,10 +187,17 @@ const BibleViewer = ({ date }: IProps) => {
                     <h3 className="mb-2 text-xl font-semibold">
                       {BIBLE_BOOK_MAPPER[range.book]} {chapter.chapter}장
                     </h3>
-                    <div className="grid grid-cols-[auto,1fr] items-start gap-x-1.5 gap-y-1 leading-loose">
+                    <div
+                      className="font-myeongjo grid grid-cols-[auto,1fr] items-start gap-x-1.5 gap-y-1"
+                      style={{
+                        fontSize: `${fontSize}px`,
+                        lineHeight: lineHeight,
+                        letterSpacing: `${letterSpacing}px`,
+                      }}
+                    >
                       {chapter.verses.map((verse) => (
                         <Fragment key={verse.verse}>
-                          <div className="mt-[5px] text-center text-sm font-medium">{verse.verse}</div>
+                          <div className="text-center font-semibold">{verse.verse}</div>
                           <div className="font-myeongjo">{verse.content}</div>
                         </Fragment>
                       ))}
