@@ -1,4 +1,3 @@
-// src/stores/planCompletion.ts
 import { UserPlanMonth } from '@/types/userPlan'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -26,10 +25,9 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
       getMonthlyPlans: (userId: string, planId: string) => {
         const cacheKey = `${userId}_${planId}`
         const cachedData = get().monthlyPlansCache[cacheKey]
-        
+
         if (!cachedData) return null
 
-        // 캐시 만료 체크
         const now = Date.now()
         if (now - cachedData.timestamp > CACHE_DURATION) {
           get().clearCache(userId, planId)
@@ -41,15 +39,14 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
 
       setMonthlyPlans: (userId: string, planId: string, plans: UserPlanMonth[]) => {
         const cacheKey = `${userId}_${planId}`
-        console.log('Setting cache for key:', cacheKey, plans)
         set((state) => ({
           monthlyPlansCache: {
             ...state.monthlyPlansCache,
             [cacheKey]: {
               plans,
-              timestamp: Date.now()
-            }
-          }
+              timestamp: Date.now(),
+            },
+          },
         }))
       },
 
@@ -63,12 +60,10 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
             monthlyPlansCache: {
               ...state.monthlyPlansCache,
               [cacheKey]: {
-                plans: cachedData.plans.map(plan => 
-                  plan.month === updatedPlan.month ? updatedPlan : plan
-                ),
-                timestamp: Date.now()
-              }
-            }
+                plans: cachedData.plans.map((plan) => (plan.month === updatedPlan.month ? updatedPlan : plan)),
+                timestamp: Date.now(),
+              },
+            },
           }
         })
       },
@@ -80,11 +75,10 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
           delete newCache[cacheKey]
           return { monthlyPlansCache: newCache }
         })
-      }
+      },
     }),
     {
       name: 'plan-completion-storage',
-      // localStorage에 저장
-    }
-  )
+    },
+  ),
 )

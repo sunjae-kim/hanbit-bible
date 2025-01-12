@@ -34,7 +34,7 @@ const MainPage = () => {
   const isInitialMount = useRef(true)
   const curMonthRef = useRef<HTMLDivElement>(null)
 
-  const { toggleCompletion, monthlyPlans } = usePlanCompletion(activePlanId)
+  const { toggleCompletion, monthlyPlans, loading } = usePlanCompletion(activePlanId)
 
   useEffect(() => {
     if (curMonthRef.current && isInitialMount.current) {
@@ -156,17 +156,21 @@ const MainPage = () => {
                             })}
 
                             <div className="absolute bottom-2 right-2 h-6 w-6">
-                              <input
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  onCompletionToggle(dateString)
-                                }}
-                                disabled={!isBeforeToday}
-                                onChange={() => {}}
-                                checked={monthlyPlans.find((p) => p.month === Number(month))?.completions[day] || false}
-                                className="h-6 w-6 accent-primary"
-                                type="checkbox"
-                              />
+                              {!loading && (
+                                <input
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    onCompletionToggle(dateString)
+                                  }}
+                                  disabled={!isBeforeToday}
+                                  onChange={() => {}}
+                                  checked={
+                                    monthlyPlans.find((p) => p.month === Number(month))?.completions[day] || false
+                                  }
+                                  className="h-6 w-6 animate-fade-in accent-primary"
+                                  type="checkbox"
+                                />
+                              )}
                             </div>
                           </div>
                         )
