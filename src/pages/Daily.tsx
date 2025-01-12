@@ -1,9 +1,15 @@
 import BibleViewer from '@/components/bible/BibleViewer'
+import { ScrollRestoration } from 'react-router'
 
 const today = new Date()
 
 const DailyPage = () => {
-  return <BibleViewer date={today} />
+  return (
+    <>
+      <ScrollRestoration />
+      <BibleViewer date={today} />
+    </>
+  )
 }
 
 export default DailyPage

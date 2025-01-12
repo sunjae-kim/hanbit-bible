@@ -31,19 +31,19 @@ const MainPage = () => {
 
   const today = new Date()
   const currentMonth = String(today.getMonth() + 1)
-  const todayRef = useRef<HTMLDivElement>(null)
+  const isInitialMount = useRef(true)
+  const curMonthRef = useRef<HTMLDivElement>(null)
 
   const { toggleCompletion, monthlyPlans } = usePlanCompletion(activePlanId)
 
   useEffect(() => {
-    if (todayRef.current) {
-      // * Temporarily disabled
-      // todayRef.current.scrollIntoView({
-      //   behavior: 'auto',
-      //   block: 'start',
-      // })
+    if (curMonthRef.current && isInitialMount.current) {
+      requestAnimationFrame(() => {
+        curMonthRef.current?.scrollIntoView({ behavior: 'auto' })
+      })
+      isInitialMount.current = false
     }
-  }, [activePlan])
+  }, [])
 
   const { showConfetti } = useConfetti()
   const onCompletionToggle = async (date: string) => {
@@ -65,9 +65,9 @@ const MainPage = () => {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-gray-50 p-4 pt-10">
-        <div className="mx-auto w-full max-w-screen-md grow">
-          <header className="mb-10 flex items-start justify-between">
+      <div className="flex min-h-screen flex-col bg-gray-50">
+        <div className="sticky top-0 z-20 bg-gray-50 px-5">
+          <header className="mx-auto flex w-full max-w-screen-md items-start justify-between pb-5 pt-10">
             <img className="h-[50px]" src={Logo} alt="logo" />
             <div className="flex items-center space-x-2">
               {user ? (
@@ -94,14 +94,21 @@ const MainPage = () => {
               )}
             </div>
           </header>
+        </div>
 
-          {activePlan && (
-            <section className="mt-5 space-y-10">
+        {activePlan && (
+          <div className="animate-fade-in p-5">
+            <section className="mx-auto w-full max-w-screen-md space-y-10">
               {Object.entries(activePlan.months).map(([month, monthlyPlan]) => {
-                const isToday = month === currentMonth
+                const isCurMonth = month === currentMonth
+
                 return (
                   <div key={month}>
-                    <div className="mb-5 scroll-m-5 text-2xl font-medium" ref={isToday ? todayRef : null}>
+                    <div
+                      id={month}
+                      className="mb-5 scroll-m-[130px] text-2xl font-medium"
+                      ref={isCurMonth ? curMonthRef : null}
+                    >
                       {today.getFullYear()}년 {month}월
                     </div>
                     <div className="grid grid-cols-2 gap-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5">
@@ -169,9 +176,11 @@ const MainPage = () => {
                 )
               })}
             </section>
-          )}
+          </div>
+        )}
 
-          <footer className="mt-5 flex h-10 items-center text-sm text-gray-700">
+        <div className="px-5 pb-28">
+          <footer className="mx-auto mt-5 flex h-10 w-full max-w-screen-md items-center text-sm text-gray-700">
             <span>문의사항</span>
             <div className="mx-2 h-3 w-px bg-gray-700" />
             <a className="mr-1 underline" href="mailto:json@kakao.com">
