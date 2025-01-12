@@ -1,6 +1,6 @@
-import { auth } from '@/lib/firebase'
 import { classNames } from '@/utils'
-import { OAuthProvider, signInWithPopup, User } from 'firebase/auth'
+import { User } from 'firebase/auth'
+import { appleAuth } from '@/lib/apple'
 
 interface AppleLoginButtonProps {
   className?: string
@@ -8,26 +8,18 @@ interface AppleLoginButtonProps {
 }
 
 const AppleLoginButton = ({ className, onSuccess }: AppleLoginButtonProps) => {
-  const signInWithApple = async () => {
+  const handleClick = async () => {
     try {
-      const provider = new OAuthProvider('apple.com')
-      provider.addScope('email')
-      provider.addScope('name')
-      provider.setCustomParameters({
-        locale: 'ko_KR',
-      })
-
-      const userCredential = await signInWithPopup(auth, provider)
-      onSuccess?.(userCredential.user)
+      const user = await appleAuth.signIn()
+      onSuccess?.(user)
     } catch (error) {
-      console.error('Apple login error:', error)
-      throw error
+      console.error('Apple login failed:', error)
     }
   }
 
   return (
     <button
-      onClick={signInWithApple}
+      onClick={handleClick}
       className={classNames(
         'flex h-[44px] min-w-[200px] items-center justify-center rounded-[8px] px-4 py-0',
         'font-sf-pro text-[17px] font-normal leading-[44px]',

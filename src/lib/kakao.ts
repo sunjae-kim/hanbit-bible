@@ -2,7 +2,7 @@ import { KAKAO_CLIENT_SECRET, KAKAO_REDIRECT_URI, KAKAO_REST_API_KEY } from '@/c
 import { auth, kakaoProvider } from '@/lib/firebase'
 import { useLoadingStore } from '@/stores/loading'
 import axios from 'axios'
-import { browserSessionPersistence, setPersistence, signInWithCredential } from 'firebase/auth'
+import { browserLocalPersistence, setPersistence, signInWithCredential } from 'firebase/auth'
 
 export const kakaoAuth = {
   async getToken(code: string) {
@@ -31,7 +31,7 @@ export const kakaoAuth = {
     try {
       const { id_token } = await this.getToken(code)
       const oauthCredential = kakaoProvider.credential({ idToken: id_token })
-      await setPersistence(auth, browserSessionPersistence)
+      await setPersistence(auth, browserLocalPersistence)
       const userCredential = await signInWithCredential(auth, oauthCredential)
       return userCredential.user
     } finally {
