@@ -50,6 +50,7 @@ export default {
           'BlinkMacSystemFont',
           'sans-serif',
         ],
+        myeongjo: ['Source Han Serif', 'ui-serif', 'serif'],
       },
       colors: {
         primary: '#557C03',

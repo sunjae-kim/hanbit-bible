@@ -183,7 +183,7 @@ const BibleViewer = ({ date }: IProps) => {
                       {chapter.verses.map((verse) => (
                         <Fragment key={verse.verse}>
                           <div className="mt-[5px] text-center text-sm font-medium">{verse.verse}</div>
-                          <div>{verse.content}</div>
+                          <div className="font-myeongjo">{verse.content}</div>
                         </Fragment>
                       ))}
                     </div>
