@@ -55,10 +55,13 @@ book,chapter,youtube_id,start_time,end_time
 창,33,sFIx9ussQE0,0:12,3:18
 창,34,sFIx9ussQE0,3:19,8:06
 창,35,sFIx9ussQE0,8:07,12:26
-창,36,a02HUejZp9g,12:24,17:15
-창,37,KcSSrjrsBLQ,4:00,9:11
+창,36,f6xlfDcGCx4,0:13,5:31
+창,37,f6xlfDcGCx4,5:32,10:50
+
 창,38,KcSSrjrsBLQ,9:16,13:40
 창,39,KcSSrjrsBLQ,13:43,17:10
+창,40,qwU_d96Z8pU,3:09,6:21
+창,41,qwU_d96Z8pU,6:24,13:45
 `.trim()
 
 interface VideoSequenceItem {
