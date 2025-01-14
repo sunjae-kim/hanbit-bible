@@ -57,11 +57,14 @@ book,chapter,youtube_id,start_time,end_time
 창,35,sFIx9ussQE0,8:07,12:26
 창,36,f6xlfDcGCx4,0:13,5:31
 창,37,f6xlfDcGCx4,5:32,10:50
+창,38,b49l3RyJxbY,0:12,4:53
+창,39,b49l3RyJxbY,4:54,8:24
+창,40,b49l3RyJxbY,8:25,11:32
 
-창,38,KcSSrjrsBLQ,9:16,13:40
-창,39,KcSSrjrsBLQ,13:43,17:10
-창,40,qwU_d96Z8pU,3:09,6:21
 창,41,qwU_d96Z8pU,6:24,13:45
+창,42,o2VFywD_Nnc,3:07,9:27
+창,43,o2VFywD_Nnc,9:28,15:20
+창,44,o2VFywD_Nnc,15:21,20:50
 `.trim()
 
 interface VideoSequenceItem {
