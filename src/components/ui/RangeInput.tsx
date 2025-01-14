@@ -1,5 +1,3 @@
-import { classNames } from '@/utils'
-
 const RangeInput = ({
   value,
   onChange,
@@ -28,27 +26,7 @@ const RangeInput = ({
         max={max}
         step={step}
         onChange={(e) => onChange(Number(e.target.value))}
-        className={classNames(
-          'h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-100',
-          'focus:outline-none',
-          '[&::-webkit-slider-thumb]:h-4',
-          '[&::-webkit-slider-thumb]:w-4',
-          '[&::-webkit-slider-thumb]:appearance-none',
-          '[&::-webkit-slider-thumb]:rounded-full',
-          '[&::-webkit-slider-thumb]:bg-white',
-          '[&::-webkit-slider-thumb]:transition-all',
-          '[&::-webkit-slider-thumb]:bg-primary',
-          '[&::-moz-range-thumb]:h-4',
-          '[&::-moz-range-thumb]:w-4',
-          '[&::-moz-range-thumb]:appearance-none',
-          '[&::-moz-range-thumb]:rounded-full',
-          '[&::-moz-range-thumb]:border-0',
-          '[&::-moz-range-thumb]:bg-white',
-          '[&::-moz-range-thumb]:transition-all',
-          '[&::-moz-range-thumb]:bg-primary',
-          '[&::-webkit-slider-runnable-track]:rounded-lg',
-          '[&::-moz-range-track]:rounded-lg',
-        )}
+        className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-opacity-50 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-gray-200 [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:transition-all [&::-moz-range-thumb]:hover:scale-110 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-gray-200 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:scale-110"
       />
     </div>
   )
