@@ -111,13 +111,14 @@ const MainPage = () => {
                     >
                       {today.getFullYear()}년 {month}월
                     </div>
-                    <div className="grid grid-cols-2 gap-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5">
+                    <div className="grid grid-cols-2 gap-2 xs:grid-cols-3 sm:grid-cols-4">
                       {Object.entries(monthlyPlan).map(([day, dailyPlan]) => {
                         const isToday = month === currentMonth && day === String(today.getDate())
                         const dateString = `${today.getFullYear()}-${month}-${day}`
                         const date = new Date(dateString.replace(/-/g, '/'))
                         const route = isToday ? '/daily' : `/plan/${activePlanId}/${dateString}`
                         const isBeforeToday = isBefore(date, today)
+                        const isAfterToday = !isBeforeToday
 
                         return (
                           <div
@@ -133,12 +134,12 @@ const MainPage = () => {
                             }}
                           >
                             {!isBeforeToday && <div className="absolute inset-0 z-10 bg-gray-100/70" />}
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-start justify-between">
                               <p className="text-lg font-medium text-gray-900">
                                 {month}월 {day}일
                               </p>
 
-                              {isSameDay(date, today) && <div className="text-xs font-semibold text-primary">오늘</div>}
+                              {isSameDay(date, today) && <div className="text-sm font-semibold text-primary">오늘</div>}
                             </div>
                             {dailyPlan.ranges.map((range) => {
                               return (
@@ -156,7 +157,7 @@ const MainPage = () => {
                             })}
 
                             <div className="absolute bottom-2 right-2 h-8 w-8">
-                              {!loading && (
+                              {!loading && !isAfterToday && (
                                 <input
                                   onClick={(e) => {
                                     e.stopPropagation()

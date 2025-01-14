@@ -1,4 +1,4 @@
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify'
 
 interface ShareOptions {
   title?: string
@@ -9,8 +9,16 @@ interface ShareOptions {
 }
 
 /**
- * 모바일 브라우저에서 공유하기 기능을 실행합니다.
- * Share API를 지원하지 않는 환경에서는 클립보드에 URL을 복사합니다.
+ * 모바일 환경인지 확인합니다.
+ */
+const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
+/**
+ * 공유하기 기능을 실행합니다.
+ * 모바일 환경에서는 Share API를 사용하고,
+ * 데스크톱이나 Share API를 지원하지 않는 환경에서는 클립보드에 URL을 복사합니다.
  */
 export const shareLink = async ({
   title = document.title,
@@ -20,8 +28,8 @@ export const shareLink = async ({
   onError,
 }: ShareOptions = {}) => {
   try {
-    // Web Share API 지원 확인
-    if (navigator.share) {
+    // 모바일 환경이고 Web Share API를 지원하는 경우
+    if (isMobileDevice() && navigator.share) {
       await navigator.share({
         title,
         text,
@@ -31,9 +39,9 @@ export const shareLink = async ({
       return true
     }
 
-    // Share API를 지원하지 않는 경우 클립보드에 복사
+    // 모바일이 아니거나 Share API를 지원하지 않는 경우 클립보드에 복사
     await copyToClipboard(url)
-    toast.success('링크가 클립보드에 복사되었습니다.')
+    toast.success('링크를 복사했습니다')
     onSuccess?.()
     return true
   } catch (error) {
@@ -66,7 +74,7 @@ const copyToClipboard = async (text: string): Promise<void> => {
     document.execCommand('copy')
     textarea.remove()
   } catch (error) {
-    console.error('클립보드 복사 실패:', error)
+    console.error('링크 복사 실패:', error)
     throw error
   }
 }

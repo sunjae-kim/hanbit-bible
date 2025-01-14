@@ -10,6 +10,7 @@ import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { BIBLE_BOOK_MAPPER, bibleManager } from '@/lib/bible'
 import { useAuthStore } from '@/stores/auth'
 import { usePlanStore } from '@/stores/plan'
+import { useTextSettingsStore } from '@/stores/text-setting'
 import { KAKAO_LOGIN_CONTEXT, KakaoLoginState } from '@/types/user'
 import { encodeObjectToBase64 } from '@/utils'
 import { shareLink } from '@/utils/shareLink'
@@ -20,7 +21,6 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import TextController from './TextController'
-import { useTextSettingsStore } from '@/stores/text-setting'
 
 interface ChapterContent {
   book: string
@@ -188,7 +188,7 @@ const BibleViewer = ({ date }: IProps) => {
                       {BIBLE_BOOK_MAPPER[range.book]} {chapter.chapter}장
                     </h3>
                     <div
-                      className="font-myeongjo grid grid-cols-[auto,1fr] items-start gap-x-1.5 gap-y-1"
+                      className="grid grid-cols-[auto,1fr] items-start gap-x-1.5 gap-y-1 font-myeongjo"
                       style={{
                         fontSize: `${fontSize}px`,
                         lineHeight: lineHeight,
