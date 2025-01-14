@@ -64,12 +64,29 @@ export class UserPlanMonthRepository {
     return this.mapToModel(docSnap.data())
   }
 
-  async findAllMonths(userId: string, planId: string, year: number): Promise<UserPlanMonth[]> {
+  async findAllMonths(userId: string, planId: string, year: number, signal?: AbortSignal): Promise<UserPlanMonth[]> {
     const monthsRef = this.getMonthsCollection(userId, planId)
     const q = query(monthsRef, where('year', '==', year))
-    const querySnapshot = await getDocs(q)
 
-    return querySnapshot.docs.map((doc) => this.mapToModel(doc.data()))
+    return new Promise((resolve, reject) => {
+      // AbortSignal 이벤트 리스너
+      if (signal) {
+        signal.addEventListener('abort', () => {
+          reject(new DOMException('Aborted', 'AbortError'))
+        })
+      }
+
+      getDocs(q)
+        .then((querySnapshot) => {
+          // 이미 abort 되었는지 확인
+          if (signal?.aborted) {
+            reject(new DOMException('Aborted', 'AbortError'))
+            return
+          }
+          resolve(querySnapshot.docs.map((doc) => this.mapToModel(doc.data())))
+        })
+        .catch(reject)
+    })
   }
 
   async createMonth(userId: string, planId: string, year: number, month: number): Promise<UserPlanMonth> {

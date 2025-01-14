@@ -6,16 +6,14 @@ interface PlanCompletionState {
   monthlyPlansCache: {
     [key: string]: {
       plans: UserPlanMonth[]
-      timestamp: number
+      lastUpdated: number
     }
   }
   getMonthlyPlans: (userId: string, planId: string) => UserPlanMonth[] | null
   setMonthlyPlans: (userId: string, planId: string, plans: UserPlanMonth[]) => void
   updateMonthPlan: (userId: string, planId: string, updatedPlan: UserPlanMonth) => void
-  clearCache: (userId: string, planId: string) => void
+  getLastUpdated: (userId: string, planId: string) => number
 }
-
-const CACHE_DURATION = 30 * 60 * 1000 // 30분으로 연장
 
 export const usePlanCompletionStore = create<PlanCompletionState>()(
   persist(
@@ -25,16 +23,12 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
       getMonthlyPlans: (userId: string, planId: string) => {
         const cacheKey = `${userId}_${planId}`
         const cachedData = get().monthlyPlansCache[cacheKey]
+        return cachedData?.plans || null
+      },
 
-        if (!cachedData) return null
-
-        const now = Date.now()
-        if (now - cachedData.timestamp > CACHE_DURATION) {
-          get().clearCache(userId, planId)
-          return null
-        }
-
-        return cachedData.plans
+      getLastUpdated: (userId: string, planId: string) => {
+        const cacheKey = `${userId}_${planId}`
+        return get().monthlyPlansCache[cacheKey]?.lastUpdated || 0
       },
 
       setMonthlyPlans: (userId: string, planId: string, plans: UserPlanMonth[]) => {
@@ -44,7 +38,7 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
             ...state.monthlyPlansCache,
             [cacheKey]: {
               plans,
-              timestamp: Date.now(),
+              lastUpdated: Date.now(),
             },
           },
         }))
@@ -61,19 +55,10 @@ export const usePlanCompletionStore = create<PlanCompletionState>()(
               ...state.monthlyPlansCache,
               [cacheKey]: {
                 plans: cachedData.plans.map((plan) => (plan.month === updatedPlan.month ? updatedPlan : plan)),
-                timestamp: Date.now(),
+                lastUpdated: Date.now(),
               },
             },
           }
-        })
-      },
-
-      clearCache: (userId: string, planId: string) => {
-        const cacheKey = `${userId}_${planId}`
-        set((state) => {
-          const newCache = { ...state.monthlyPlansCache }
-          delete newCache[cacheKey]
-          return { monthlyPlansCache: newCache }
         })
       },
     }),
