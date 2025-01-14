@@ -123,7 +123,7 @@ const MainPage = () => {
                           <div
                             key={day}
                             className={classNames(
-                              'relative flex h-[100px] flex-col overflow-hidden rounded-lg bg-white p-2 shadow-new-lg transition-shadow',
+                              'relative flex h-[120px] flex-col overflow-hidden rounded-lg bg-white p-2 shadow-new-lg transition-shadow',
                               isBeforeToday ? 'cursor-pointer hover:shadow-new-2xl' : 'cursor-not-allowed',
                             )}
                             onClick={() => {
@@ -134,7 +134,7 @@ const MainPage = () => {
                           >
                             {!isBeforeToday && <div className="absolute inset-0 z-10 bg-gray-100/70" />}
                             <div className="flex items-center justify-between">
-                              <p className="text-sm font-medium text-gray-900">
+                              <p className="text-lg font-medium text-gray-900">
                                 {month}월 {day}일
                               </p>
 
@@ -142,7 +142,7 @@ const MainPage = () => {
                             </div>
                             {dailyPlan.ranges.map((range) => {
                               return (
-                                <div key={range.book} className="text-xs text-gray-700 xs:text-sm">
+                                <div key={range.book} className="text-gray-700">
                                   <span>{BIBLE_BOOK_MAPPER[range.book]} </span>
                                   {range.startChapter !== range.endChapter ? (
                                     <span>
@@ -155,7 +155,7 @@ const MainPage = () => {
                               )
                             })}
 
-                            <div className="absolute bottom-2 right-2 h-6 w-6">
+                            <div className="absolute bottom-2 right-2 h-8 w-8">
                               {!loading && (
                                 <input
                                   onClick={(e) => {
@@ -167,7 +167,7 @@ const MainPage = () => {
                                   checked={
                                     monthlyPlans.find((p) => p.month === Number(month))?.completions[day] || false
                                   }
-                                  className="h-6 w-6 animate-fade-in accent-primary"
+                                  className="h-8 w-8 animate-fade-in accent-primary"
                                   type="checkbox"
                                 />
                               )}
