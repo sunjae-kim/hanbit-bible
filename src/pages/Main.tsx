@@ -4,6 +4,7 @@ import KakaoLoginButton from '@/components/auth/KakaoLoginButton'
 import { useConfetti } from '@/contexts/confetti.context'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { BIBLE_BOOK_MAPPER } from '@/lib/bible'
+import { routes, useTypedNavigate } from '@/router'
 import { useAuthStore } from '@/stores/auth'
 import { usePlanStore } from '@/stores/plan'
 import { KakaoLoginState } from '@/types/user'
@@ -12,13 +13,12 @@ import { Button } from '@headlessui/react'
 import { BookOpenIcon } from '@heroicons/react/20/solid'
 import { isBefore, isSameDay } from 'date-fns'
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 
 const LOGIN_TOAST_ID = 'login-required-toast'
 
 const MainPage = () => {
-  const navigate = useNavigate()
+  const { navigate } = useTypedNavigate()
   const user = useAuthStore((state) => state.user)
 
   const activePlan = usePlanStore((state) => {
@@ -96,7 +96,7 @@ const MainPage = () => {
           </header>
         </div>
 
-        {activePlan && (
+        {activePlanId && activePlan && (
           <div className="animate-fade-in p-5">
             <section className="mx-auto w-full max-w-screen-md space-y-10">
               {Object.entries(activePlan.months).map(([month, monthlyPlan]) => {
@@ -116,7 +116,7 @@ const MainPage = () => {
                         const isToday = month === currentMonth && day === String(today.getDate())
                         const dateString = `${today.getFullYear()}-${month}-${day}`
                         const date = new Date(dateString.replace(/-/g, '/'))
-                        const route = isToday ? '/daily' : `/plan/${activePlanId}/${dateString}`
+                        const route = isToday ? routes.daily : routes.toPlanByDate(activePlanId, dateString)
                         const isBeforeToday = isBefore(date, today)
                         const isAfterToday = !isBeforeToday
 
@@ -197,7 +197,7 @@ const MainPage = () => {
       </div>
 
       <button
-        onClick={() => navigate('/daily')}
+        onClick={() => navigate(routes.daily)}
         className="fixed bottom-5 right-5 z-10 flex h-20 w-20 flex-col items-center justify-center rounded-full bg-primary text-white shadow-lg transition-colors hover:bg-[#719728]"
       >
         <BookOpenIcon className="h-8 w-8" />

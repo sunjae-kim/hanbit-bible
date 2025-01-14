@@ -1,13 +1,13 @@
 import BibleViewer from '@/components/bible/BibleViewer'
+import { routes, useTypedNavigate, useTypedParams } from '@/router'
 import { startOfDay } from 'date-fns'
-import { useNavigate, useParams } from 'react-router'
 
 const PlanByDatePage = () => {
-  const { date } = useParams<{ plainId: string; date: string }>()
-  const navigate = useNavigate()
+  const { date } = useTypedParams<'/plan/:planId/:date'>()
+  const { navigate } = useTypedNavigate()
 
   if (!date) {
-    navigate('/')
+    navigate(routes.home)
     return null
   }
 
@@ -16,7 +16,7 @@ const PlanByDatePage = () => {
 
   // 미래 날짜인 경우 루트로 이동
   if (selectedDate > today) {
-    navigate('/')
+    navigate(routes.home)
     return null
   }
 

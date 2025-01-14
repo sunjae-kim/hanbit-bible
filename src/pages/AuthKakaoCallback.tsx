@@ -1,18 +1,19 @@
 import { useConfetti } from '@/contexts/confetti.context'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { kakaoAuth } from '@/lib/kakao'
+import { routes, useTypedNavigate } from '@/router'
 import { usePlanStore } from '@/stores/plan'
 import { KAKAO_LOGIN_CONTEXT, KakaoLoginState } from '@/types/user'
 import { decodeBase64ToObject } from '@/utils'
 import { User } from 'firebase/auth'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation } from 'react-router'
 import { BounceLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 
 export default function AuthKakaoCallbackPage() {
   const location = useLocation()
-  const navigate = useNavigate()
+  const { navigate } = useTypedNavigate()
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search])
   const code = searchParams.get('code')
   const signInAttempted = useRef(false)
@@ -50,26 +51,27 @@ export default function AuthKakaoCallbackPage() {
       .then(async (user) => {
         if (!user) {
           toast.error('로그인 정보가 없습니다.')
-          navigate('/')
+          navigate(routes.home)
           return
         }
 
         if (stateObj.context === KAKAO_LOGIN_CONTEXT.CHECK) {
           await checkAsRead(user)
         } else {
+          const next: any = stateObj.path || routes.home
           toast.success('로그인 성공!')
-          navigate(stateObj.path || '/')
+          navigate(next)
         }
       })
       .catch((error) => {
         console.error('Kakao 로그인 실패:', error)
-        navigate('/')
+        navigate(routes.home)
         toast.error('로그인에 실패했습니다. 다시 시도해주세요.')
       })
   }, [code, searchParams, checkAsRead, navigate])
 
   if (!code) {
-    navigate('/')
+    navigate(routes.home)
     return null
   }
 

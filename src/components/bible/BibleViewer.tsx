@@ -8,6 +8,7 @@ import { useConfetti } from '@/contexts/confetti.context'
 import { useLikes } from '@/hooks/useLikes'
 import { usePlanCompletion } from '@/hooks/usePlanCompletion'
 import { BIBLE_BOOK_MAPPER, bibleManager } from '@/lib/bible'
+import { routes, useTypedNavigate } from '@/router'
 import { useAuthStore } from '@/stores/auth'
 import { usePlanStore } from '@/stores/plan'
 import { useTextSettingsStore } from '@/stores/text-setting'
@@ -18,7 +19,6 @@ import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { ArrowUpOnSquareIcon, ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { format, isSameDay } from 'date-fns'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import TextController from './TextController'
 
@@ -33,7 +33,7 @@ interface IProps {
 }
 
 const BibleViewer = ({ date }: IProps) => {
-  const navigate = useNavigate()
+  const { navigate } = useTypedNavigate()
   const user = useAuthStore((state) => state.user)
   const { getReadingForDate } = usePlanStore()
   const [chapters, setChapters] = useState<Record<string, ChapterContent[]>>({})
@@ -52,7 +52,7 @@ const BibleViewer = ({ date }: IProps) => {
     } else {
       setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true })
       toast('🎉 읽기 체크완료!')
-      navigate('/')
+      navigate(routes.home)
       showConfetti()
     }
   }, [user, setCompletion, navigate, date, showConfetti])
@@ -106,7 +106,7 @@ const BibleViewer = ({ date }: IProps) => {
       <div className="bg-primary/10 px-4">
         <div className="relative mx-auto min-h-screen max-w-screen-md pb-4 pt-20">
           <div className="absolute top-4 flex w-full items-start">
-            <button className="-m-5 p-5" onClick={() => navigate('/')}>
+            <button className="-m-5 p-5" onClick={() => navigate(routes.home)}>
               <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
             </button>
 
@@ -215,7 +215,7 @@ const BibleViewer = ({ date }: IProps) => {
           )}
 
           <div className="mb-4 mt-10 grid animate-fade-in grid-cols-2 gap-2">
-            <Button className="py-5 !text-base" variant="secondary" onClick={() => navigate('/')}>
+            <Button className="py-5 !text-base" variant="secondary" onClick={() => navigate(routes.home)}>
               읽기표 보러가기
             </Button>
             <Button onClick={markAsReadAndLeave}>
@@ -240,7 +240,7 @@ const BibleViewer = ({ date }: IProps) => {
             onSuccess={(user) => {
               setLoginModal(false)
               setCompletion({ date: format(date, 'yyyy-MM-dd'), value: true, user })
-              navigate('/')
+              navigate(routes.home)
               toast('🎉 읽기 체크완료!')
               showConfetti()
             }}
