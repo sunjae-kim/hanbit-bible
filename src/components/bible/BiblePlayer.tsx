@@ -60,9 +60,8 @@ book,chapter,youtube_id,start_time,end_time
 창,38,b49l3RyJxbY,0:12,4:53
 창,39,b49l3RyJxbY,4:54,8:24
 창,40,b49l3RyJxbY,8:25,11:32
-
-창,41,qwU_d96Z8pU,6:24,13:45
-창,42,o2VFywD_Nnc,3:07,9:27
+창,41,yTUDKrSv64Y,0:12,7:46
+창,42,yTUDKrSv64Y,7:47,14:00
 창,43,o2VFywD_Nnc,9:28,15:20
 창,44,o2VFywD_Nnc,15:21,20:50
 `.trim()
