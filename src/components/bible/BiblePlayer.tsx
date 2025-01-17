@@ -70,6 +70,12 @@ book,chapter,youtube_id,start_time,end_time
 창,48,GCNxywjFxqc,3:13,8:25
 창,49,GCNxywjFxqc,8:26,16:14
 창,50,GCNxywjFxqc,16:15,20:55
+출,1,RhkWq09Nx6M,5:12,7:50
+출,2,RhkWq09Nx6M,7:51,11:38
+출,3,RhkWq09Nx6M,11:39,16:25
+출,4,0BJSIievUzE,3:29,8:35
+출,5,0BJSIievUzE,8:36,12:35
+출,6,0BJSIievUzE,12:36,16:57
 `.trim()
 
 interface VideoSequenceItem {
