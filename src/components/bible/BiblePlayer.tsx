@@ -73,12 +73,24 @@ book,chapter,youtube_id,start_time,end_time
 출,1,bL48YebYx94,0:12,2:49
 출,2,bL48YebYx94,2:50,6:38
 출,3,bL48YebYx94,6:39,11:12
-출,4,0BJSIievUzE,3:29,8:35
-출,5,0BJSIievUzE,8:36,12:35
-출,6,0BJSIievUzE,12:36,16:57
-출,7,EK0i8-q5udY,2:56,6:57
-출,8,EK0i8-q5udY,6:58,12:41
-출,9,EK0i8-q5udY,12:42,18:12
+출,4,InxZKKHoZFY,0:12,5:18
+출,5,InxZKKHoZFY,5:19,9:05
+출,6,InxZKKHoZFY,9:06,13:25
+출,7,zQi7dwlwNBo,0:12,4:08
+출,8,zQi7dwlwNBo,4:09,9:43
+출,9,zQi7dwlwNBo,9:44,15:21
+출,10,p5k7f6bZq8I,4:02,9:21
+출,11,p5k7f6bZq8I,9:22,11:23
+출,12,p5k7f6bZq8I,11:24,19:27
+출,13,bkfLkSKm-cI,4:14,8:44
+출,14,bkfLkSKm-cI,8:45,14:11
+출,15,bkfLkSKm-cI,14:12,19:19
+출,16,w_Dgrm6bqgI,3:51,10:09
+출,17,w_Dgrm6bqgI,10:10,12:58
+출,18,w_Dgrm6bqgI,12:59,17:26
+출,19,QP6FwZrjJzI,4:25,8:48
+출,20,QP6FwZrjJzI,8:49,12:30
+출,21,QP6FwZrjJzI,12:31,17:38
 `.trim()
 
 interface VideoSequenceItem {
