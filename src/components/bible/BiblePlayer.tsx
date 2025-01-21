@@ -181,49 +181,6 @@ function createVideoSequence(bibleRange: BibleRange[], csvData: string): VideoSe
   return videoSequence
 }
 
-// function createVideoSequenceForTest(bibleRange: BibleRange[], csvData: string): VideoSequenceItem[] {
-//   // CSV 파싱
-//   const rows = csvData.trim().split('\n').slice(1)
-//   const bibleData = rows.map((row) => {
-//     const [book, chapter, youtubeId, startTime] = row.split(',')
-//     // endTime은 startTime + 5초로 계산
-//     const startSeconds = timeToSeconds(startTime)
-//     const endSeconds = startSeconds + 5
-//     const endTime = `${Math.floor(endSeconds / 60)}:${endSeconds % 60}`
-
-//     return {
-//       book,
-//       chapter: parseInt(chapter),
-//       youtubeId,
-//       startTime,
-//       endTime,
-//     }
-//   })
-
-//   const videoSequence: VideoSequenceItem[] = []
-
-//   bibleRange.forEach((range) => {
-//     let currentVideoId = ''
-//     let currentStartTime = ''
-//     let currentEndTime = ''
-
-//     const chaptersInRange = bibleData.filter(
-//       (item) => item.book === range.book && item.chapter >= range.startChapter && item.chapter <= range.endChapter,
-//     )
-
-//     chaptersInRange.forEach((chapter, index) => {
-//       // 각 챕터를 별도의 시퀀스 아이템으로 처리
-//       videoSequence.push({
-//         videoId: chapter.youtubeId,
-//         startTime: chapter.startTime,
-//         endTime: chapter.endTime,
-//       })
-//     })
-//   })
-
-//   return videoSequence
-// }
-
 const BiblePlayer = ({ bibleRange, onEnded, date }: IProps) => {
   const user = useAuthStore((state) => state.user)
   const videoSequence = createVideoSequence(bibleRange, bibleYoutubeData)
@@ -381,6 +338,23 @@ const BiblePlayer = ({ bibleRange, onEnded, date }: IProps) => {
         }`,
     )
     .join(', ')
+
+  if (videoSequence.length === 0) {
+    return (
+      <div className="mb-10 flex w-full flex-col items-center">
+        <div className="relative mb-2 w-full">
+          <div className="flex aspect-video w-full flex-col items-center justify-center rounded-xl bg-white p-4">
+            <div className="mb-2 text-xl font-medium text-gray-800">영상 준비중 🎬</div>
+            <p className="text-center text-gray-600">
+              해당 성경 구절의 영상을 준비하고 있습니다.
+              <br />
+              조금만 기다려주세요!
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex w-full flex-col items-center">
