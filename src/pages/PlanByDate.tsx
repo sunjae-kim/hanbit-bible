@@ -1,6 +1,7 @@
 import BibleViewer from '@/components/bible/BibleViewer'
 import { routes, useTypedNavigate, useTypedParams } from '@/router'
 import { startOfDay } from 'date-fns'
+import { ScrollRestoration } from 'react-router'
 
 const PlanByDatePage = () => {
   const { date } = useTypedParams<'/plan/:planId/:date'>()
@@ -20,7 +21,12 @@ const PlanByDatePage = () => {
     return null
   }
 
-  return <BibleViewer date={selectedDate} />
+  return (
+    <>
+      <ScrollRestoration />
+      <BibleViewer date={selectedDate} />
+    </>
+  )
 }
 
 export default PlanByDatePage
