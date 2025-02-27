@@ -153,4 +153,11 @@ book,chapter,youtube_id,start_time,end_time
 민,34,V76yANv1Is0,5:00,8:17
 민,35,V76yANv1Is0,8:18,13:11
 민,36,V76yANv1Is0,13:12,15:47
+신,1,KFZlRZWzPoM,0:12,7:49
+신,2,KFZlRZWzPoM,7:50,13:51
+신,3,2EpsGErNbGE,0:12,5:29
+신,4,2EpsGErNbGE,5:30,14:23
+신,5,Xd7BLj2vcHU,0:12,5:27
+신,6,Xd7BLj2vcHU,5:28,9:16
+신,7,Xd7BLj2vcHU,9:17,14:23
 `.trim()
