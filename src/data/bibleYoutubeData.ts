@@ -201,4 +201,8 @@ book,chapter,youtube_id,start_time,end_time
 수,12,1OUxJ4uQX_M,0:12,2:55
 수,13,1OUxJ4uQX_M,2:56,7:49
 수,14,1OUxJ4uQX_M,7:50,10:39
+수,15,rn8fQCZ-CeI,0:12,6:10
+수,16,rn8fQCZ-CeI,6:11,7:32
+수,17,rn8fQCZ-CeI,7:33,11:16
+수,18,rn8fQCZ-CeI,11:17,15:17
 `.trim()
