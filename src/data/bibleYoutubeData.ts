@@ -205,4 +205,12 @@ book,chapter,youtube_id,start_time,end_time
 수,16,rn8fQCZ-CeI,6:11,7:32
 수,17,rn8fQCZ-CeI,7:33,11:16
 수,18,rn8fQCZ-CeI,11:17,15:17
+수,19,QICPBvY73RU,0:12,5:54
+수,20,QICPBvY73RU,5:55,7:27
+수,21,QICPBvY73RU,7:28,13:18
+수,22,6T60qKTBjxw,0:12,7:30
+수,23,6T60qKTBjxw,7:31,10:48
+수,24,6T60qKTBjxw,10:49,17:21
+삿,1,9npcUJMtRlE,0:12,5:59
+삿,2,9npcUJMtRlE,6:00,10:06
 `.trim()
